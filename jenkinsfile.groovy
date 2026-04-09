@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment {
-        IMAGE = "sakshith123/pythonapp"
+        IMAGE = "laasya123/pythonapp"
         AWS_REGION = "us-east-1"
-        CLUSTER_NAME = "sakshith_01-cluster"
+        CLUSTER_NAME = "laasya_01-cluster"
         AWS_PROFILE = "eks-profile"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/SAKSHITH22/pythonapp.git'
+                git branch: 'main', url: 'https://github.com/laasya22/pythonapp.git'
             }
         }
 
