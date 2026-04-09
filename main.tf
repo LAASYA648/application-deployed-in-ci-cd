@@ -2,65 +2,65 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "tls_private_key" "sakshith_key" {
+resource "tls_private_key" "laasya_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
-resource "aws_key_pair" "sakshith_key_pair" {
-  key_name   = "sakshith_01-key1"
-  public_key = tls_private_key.sakshith_key.public_key_openssh
+resource "aws_key_pair" "laasya_key_pair" {
+  key_name   = "laasya_01-key1"
+  public_key = tls_private_key.laasya_key.public_key_openssh
 }
 
-resource "local_file" "sakshith_private_key1" {
-  filename = "${path.module}/sakshith_01-key1.pem"
-  content  = tls_private_key.sakshith_key.private_key_pem
+resource "local_file" "laasya_private_key1" {
+  filename = "${path.module}/laasya_01-key1.pem"
+  content  = tls_private_key.laasya_key.private_key_pem
   file_permission = "0600"
 }
  locals {
-  ssh_key_name = aws_key_pair.sakshith_key_pair.key_name
+  ssh_key_name = aws_key_pair.laasya_key_pair.key_name
 }
 variable "ssh_key_name" {
   description = "Name of the existing SSH key pair"
   type        = string
 }
 
-resource "aws_vpc" "sakshith_01_vpc" {
+resource "aws_vpc" "laasya_01_vpc" {
   cidr_block = "10.1.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
-    Name = "sakshith_01-vpc"
+    Name = "laasya_01-vpc"
   }
 }
 
-resource "aws_subnet" "sakshith_01_subnet" {
+resource "aws_subnet" "laasya_01_subnet" {
   count = 2
-  vpc_id = aws_vpc.sakshith_01_vpc.id
-  cidr_block = cidrsubnet(aws_vpc.sakshith_01_vpc.cidr_block, 8, count.index)
+  vpc_id = aws_vpc.laasya_01_vpc.id
+  cidr_block = cidrsubnet(aws_vpc.laasya_01_vpc.cidr_block, 8, count.index)
   availability_zone = element(["us-east-1a", "us-east-1b"], count.index)
   map_public_ip_on_launch = true
   tags = {
-    Name = "sakshith_01-subnet-${count.index}"
+    Name = "laasya_01-subnet-${count.index}"
   }
 }
 
-resource "aws_internet_gateway" "sakshith_01_igw" {
-  vpc_id = aws_vpc.sakshith_01_vpc.id
+resource "aws_internet_gateway" "laasya_01_igw" {
+  vpc_id = aws_vpc.laasya_01_vpc.id
   tags = {
-    Name = "sakshith_01-igw"
+    Name = "laasya_01-igw"
   }
 }
 
-resource "aws_route_table" "sakshith_01_route_table" {
-  vpc_id = aws_vpc.sakshith_01_vpc.id
+resource "aws_route_table" "laasya_01_route_table" {
+  vpc_id = aws_vpc.laasya_01_vpc.id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.sakshith_01_igw.id
+    gateway_id = aws_internet_gateway.laasya_01_igw.id
   }
   tags = {
-    Name = "sakshith_01-route-table"
+    Name = "laasya_01-route-table"
   }
 }
 
